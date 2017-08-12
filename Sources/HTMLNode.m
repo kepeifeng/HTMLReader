@@ -219,9 +219,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)textContent
 {
     NSMutableArray *parts = [NSMutableArray new];
-    for (HTMLTextNode *node in self.treeEnumerator) {
+    for (HTMLNode *node in self.treeEnumerator) {
         if ([node isKindOfClass:[HTMLTextNode class]]) {
-            [parts addObject:node.data];
+            [parts addObject:((HTMLTextNode *)node).data];
+        }else if([node isKindOfClass:[HTMLElement class]] && [((HTMLElement *)node).tagName.lowercaseString isEqualToString:@"br"]){
+            [parts addObject:@"\n"];
         }
     }
     return [parts componentsJoinedByString:@""];
